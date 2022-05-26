@@ -1,6 +1,6 @@
 const { SerialPort } = require('serialport')
 const process = require("child_process")
-
+const fs = require('fs')
 const mqtt = require('mqtt')  // require mqtt
 let config = JSON.parse(fs.readFileSync('storage.json')).config;
 const client = mqtt.connect(config.mqtt_host, {
@@ -45,7 +45,6 @@ client.on('connect', () => {
 client.on('message', function(topic, message, packet) {
     if(message == "PRESS") {
         const gdo_id = topic.split("/")[2]-1;
-        const fs = require('fs');
         var cfg = JSON.parse(fs.readFileSync('storage.json'));
         let codes = cfg.garages[gdo_id];
         let manchester = getManchester(codes.fixed,codes.rolling);
